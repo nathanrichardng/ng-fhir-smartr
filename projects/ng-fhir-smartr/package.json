@@ -1,0 +1,13 @@
+{
+  "name": "ng-fhir-smartr",
+  "version": "0.0.2",
+  "peerDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0"
+  },
+  "dependencies": {
+    "fhir.js": "0.0.20",
+    "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.3.3"
+  }
+}

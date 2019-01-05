@@ -1,27 +1,76 @@
-# FhirApp
+# ng-fhir-smartr
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.6.
+A library for creating SMART on FHIR applications with Angular
 
-## Development server
+## Usage
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+#### Add the package to your Angular project
+```javascript
+npm install --save ng-fhir-smartr
+```
 
-## Code scaffolding
+#### Create a launch component
+This is equivalent to creating a launch.html page with the standard SMART on FHIR js client, and will require you to define a launch configuration.
+Once launched, the user will be redirected to the path assigned as the redirectEndpoint.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+**Note**: Make sure to add this component to the 'launch' route in app-routine.module.ts 
+```javascript
+import { Component, OnInit } from '@angular/core';
+import { FhirService } from 'ng-fhir-smartr';
 
-## Build
+...
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+export class LaunchComponent implements OnInit {
 
-## Running unit tests
+  // Inject FhirService into launch component
+  constructor(private fhirService: FhirService) {}
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  ngOnInit() {
+    // Leave serviceUri undefined if application will be launched by EHR application
+    let launchConfig = {
+      serviceUri: "http://launch.smarthealthit.org/v/r2/sim/eyJoIjoiMSIsImoiOiIxIn0/fhir", 
+      clientId: "my_web_app",
+      scope: "patient/*.read launch/patient",
+      state: Math.round(Math.random()*100000000).toString(),
+      launchEndpoint: "launch",
+      redirectEndpoint: "",
+    };
+    
+    this.fhirService.launch(launchConfig);
+  }
 
-## Running end-to-end tests
+}
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+#### Use the FHIR service in custom components
+``` javascript
+import { Component, OnInit } from '@angular/core';
+import { FhirService } from 'ng-fhir-smartr';
 
-## Further help
+...
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+export class MyComponent implements OnInit {
+
+  // Inject FhirService into the component
+  constructor(private fhirService: FhirService) {}
+
+  ngOnInit() {
+  	/**
+     * Perform a query and store the response in an Observable namespace.
+     * (Arbitrarily titled "testing" in this example).
+     */
+    this.fhirService.queryInto("testing", { type: 'Patient', query: { name: 'bob'} });
+    
+    /**
+     * Subscribe to the "testing" namespace and handle updates to the Observable
+     */
+    this.fhirService.getDataFrom("testing").subscribe(FhirResponse => {
+      console.log('Receiving observable data from namespace "testing"');
+      console.log(FhirResponse);
+    });
+  }
+}
+```
+
+#### Test your application against the sandbox
+[http://launch.smarthealthit.org](http://launch.smarthealthit.org)

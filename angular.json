@@ -133,6 +133,41 @@
           }
         }
       }
+    },
+    "ng-fhir-smartr": {
+      "root": "projects/ng-fhir-smartr",
+      "sourceRoot": "projects/ng-fhir-smartr/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ng-fhir-smartr/tsconfig.lib.json",
+            "project": "projects/ng-fhir-smartr/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-fhir-smartr/src/test.ts",
+            "tsConfig": "projects/ng-fhir-smartr/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-fhir-smartr/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-fhir-smartr/tsconfig.lib.json",
+              "projects/ng-fhir-smartr/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "fhir-app"

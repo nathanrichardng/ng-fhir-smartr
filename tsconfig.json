@@ -16,6 +16,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ng-fhir-smartr": [
+        "dist/ng-fhir-smartr"
+      ],
+      "ng-fhir-smartr/*": [
+        "dist/ng-fhir-smartr/*"
+      ]
+    }
   }
 }
